@@ -39,8 +39,31 @@ const signup = async (email, password, username) => {
     // INSERT 쿼리 결과 반환
     return result.rows[0];
   } catch (error) {
-    console.error("Error saving user to database:", error);
-    throw error; // 에러 던지기
+    return "404";
+    // console.error("Error saving user to database:", error);
+    // throw error; // 에러 던지기
+  }
+};
+
+const profile = async (userId) => {
+  try {
+    const client = await dbConfig.connect();
+
+    const query = "SELECT * FROM user_schema.user_data WHERE user_id = $1";
+    const values = [userId];
+    const result = await client.query(query, values);
+    console.log("result", result);
+
+    client.release();
+
+    if (!result.rows[0]) {
+      return "404";
+    } else {
+      return result.rows[0];
+    }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw error;
   }
 };
 
@@ -48,4 +71,5 @@ const signup = async (email, password, username) => {
 export default {
   signin,
   signup,
+  profile,
 };

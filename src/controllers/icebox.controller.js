@@ -7,9 +7,19 @@ const getFoodDataAll = async (req, res) => {
    * @property {number} user_id
    */
   const user_id = req.params.userId;
+  const { category, food_name } = req.query;
 
-  const foodData = await iceboxService.getFoodDataAll(user_id);
-  res.status(200).json(foodData);
+  try {
+    const foodData = await iceboxService.getFoodDataAll(
+      user_id,
+      category,
+      food_name
+    );
+    res.status(200).json(foodData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };
 
 //유저 아이스박스에 있는 특정 음식 데이터를 가져오는 함수

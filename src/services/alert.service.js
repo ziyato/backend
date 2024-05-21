@@ -3,7 +3,7 @@ import dbConfig from "../configs/db.config";
 const getAlertData = async (user_id, alert_date) => {
   const client = await dbConfig.connect();
   console.log("user_id", user_id);
-    console.log("alert_date : ", alert_date);
+  console.log("alert_date", alert_date);
 
   const query = `
     SELECT *

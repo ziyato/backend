@@ -1,15 +1,31 @@
 import dbConfig from "../configs/db.config";
 
-const getFoodDataAll = async (user_id) => {
+const getFoodDataAll = async (user_id, category = null, food_name = null) => {
   const client = await dbConfig.connect();
 
-  const query = "SELECT * FROM food_schema.food_data WHERE user_id = ($1)";
-  const values = [user_id];
-  const result = await client.query(query, values);
-  console.log(`${user_id} 님의 음식 데이터 : `, result);
+  let query = "SELECT * FROM food_schema.food_data WHERE user_id = $1";
+  let values = [user_id];
 
-  client.release();
-  return result.rows;
+  if (category) {
+    query += " AND category = $2";
+    values.push(category);
+  }
+
+  if (food_name) {
+    query += ` AND food_name ILIKE $${values.length + 1}`;
+    values.push(`%${food_name}%`);
+  }
+
+  try {
+    const result = await client.query(query, values);
+    console.log(`${user_id} 님의 음식 데이터 : `, result.rows);
+    return result.rows;
+  } catch (error) {
+    console.error("Error executing query", error);
+    throw error;
+  } finally {
+    client.release();
+  }
 };
 
 const getFoodData = async (user_id, food_id) => {

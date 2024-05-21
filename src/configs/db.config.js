@@ -6,4 +6,5 @@ export default new Pool({
   username: process.env.POSTGRES_USER ?? "postgres",
   password: process.env.POSTGRES_PASS ?? "postgres",
   database: "iceboxdb",
+  max: 10, //최대 커넥션 수
 });

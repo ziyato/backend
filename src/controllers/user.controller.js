@@ -17,7 +17,7 @@ const userLogin = async (req, res, next) => {
   }
 };
 
-const userSignin = async (req, res, next) => {
+const userSignup = async (req, res, next) => {
   /**
    * @userData {Object} - 사용자 데이터
    * @property {string} email - 사용자 아이디
@@ -27,10 +27,34 @@ const userSignin = async (req, res, next) => {
   let { email, password, username } = req.body;
   // next(await loginService.signup(email, password, username));
   let result = await loginService.signup(email, password, username);
-  res.send(result);
+  if (result === "404") {
+    res.status(404).send("데이터를 전부 입력해주세요");
+    return;
+  } else {
+    res.send(result);
+    return;
+  }
+};
+
+const userProfile = async (req, res, next) => {
+  /**
+   * @userData {Object}
+   * @property {string} user_id - 사용자 식별자
+   */
+  const user_id = req.params.userId;
+  let userData = await loginService.profile(user_id);
+
+  if (userData === "404") {
+    res.status(404).send("User not found");
+    return;
+  } else {
+    res.send(userData);
+    return;
+  }
 };
 
 export default {
   userLogin,
-  userSignin,
+  userSignup,
+  userProfile,
 };
