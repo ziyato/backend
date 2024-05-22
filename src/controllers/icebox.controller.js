@@ -1,4 +1,4 @@
-import iceboxService from "../services/icebox.service.js";
+import foodService from "../services/icebox.service.js";
 
 //유저 아이스박스에 있는 모든 음식 데이터를 가져오는 함수
 const getFoodDataAll = async (req, res) => {
@@ -10,7 +10,7 @@ const getFoodDataAll = async (req, res) => {
   const { category, food_name } = req.query;
 
   try {
-    const foodData = await iceboxService.getFoodDataAll(
+    const foodData = await foodService.getFoodDataAll(
       user_id,
       category,
       food_name
@@ -33,7 +33,7 @@ const getFoodData = async (req, res) => {
   const user_id = req.params.userId;
   const food_id = req.params.foodId;
 
-  const foodData = await iceboxService.getFoodDataAll(user_id, food_id);
+  const foodData = await foodService.getFoodDataAll(user_id, food_id);
   res.status(200).json(foodData);
 };
 
@@ -51,7 +51,7 @@ const postFoodData = async (req, res) => {
   let user_id = req.params.userId;
   let { food_name, food_pic, category, purchase_date, expiration_date } =
     req.body;
-  let result = await iceboxService.postFoodData(
+  let result = await foodService.postFoodData(
     user_id,
     food_name,
     food_pic,

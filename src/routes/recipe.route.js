@@ -3,6 +3,6 @@ import recipeController from "../controllers/recipe.controller";
 
 const router = Router();
 
-router.post("/", recipeController.recipe);
+router.post("/", recipeController.getRecipe);
 
 export default router;

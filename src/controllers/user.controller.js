@@ -1,4 +1,4 @@
-import loginService from "../services/user.service";
+import userService from "../services/user.service";
 
 const userLogin = async (req, res, next) => {
   /**
@@ -7,7 +7,7 @@ const userLogin = async (req, res, next) => {
    * @property {string} password - 비밀번호
    */
   let { email, password } = req.body;
-  let userData = await loginService.signin(email, password);
+  let userData = await userService.signin(email, password);
   if (userData === "404") {
     res.status(404).send("User not found");
     return;
@@ -26,7 +26,7 @@ const userSignup = async (req, res, next) => {
    */
   let { email, password, username } = req.body;
   // next(await loginService.signup(email, password, username));
-  let result = await loginService.signup(email, password, username);
+  let result = await userService.signup(email, password, username);
   if (result === "404") {
     res.status(404).send("데이터를 전부 입력해주세요");
     return;
@@ -42,7 +42,7 @@ const userProfile = async (req, res, next) => {
    * @property {string} user_id - 사용자 식별자
    */
   const user_id = req.params.userId;
-  let userData = await loginService.profile(user_id);
+  let userData = await userService.profile(user_id);
 
   if (userData === "404") {
     res.status(404).send("User not found");

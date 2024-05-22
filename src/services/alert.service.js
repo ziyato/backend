@@ -1,24 +1,30 @@
 import dbConfig from "../configs/db.config";
 
-const getAlertData = async (user_id, alert_date) => {
-  const client = await dbConfig.connect();
-  console.log("user_id", user_id);
-  console.log("alert_date", alert_date);
+class AlertService {
+  constructor(dbConfig) {
+    this.dbConfig = dbConfig;
+  }
 
-  const query = `
-    SELECT *
-    FROM food_schema.food_data
-    WHERE user_id = $1 
-      AND expiration_date < CURRENT_DATE + INTERVAL '${alert_date} days';
-  `;
-  const values = [user_id];
-  const result = await client.query(query, values);
-  console.log(`${user_id} 님의 음식 데이터 : `, result);
+  async getAlertData(userId, alertDate) {
+    const client = await this.dbConfig.connect();
+    console.log("user_id", userId);
+    console.log("alert_date", alertDate);
 
-  client.release();
-  return result.rows;
-};
+    const query = `
+      SELECT *
+      FROM food_schema.food_data
+      WHERE user_id = $1 
+        AND expiration_date < CURRENT_DATE + INTERVAL '${alertDate} days';
+    `;
+    const values = [userId];
+    const result = await client.query(query, values);
+    console.log(`${userId} 님의 음식 데이터 : `, result);
 
-export default {
-  getAlertData,
-};
+    client.release();
+    return result.rows;
+  }
+}
+
+const alertService = new AlertService(dbConfig);
+
+export default alertService;

@@ -9,16 +9,20 @@ const getAlertData = async (req, res) => {
   const user_id = req.params.userId;
   const alert_date = req.query.alertDate;
 
-  const foodData = await alertService.getAlertData(user_id, alert_date);
+  try {
+    const foodData = await alertService.getAlertData(user_id, alert_date);
 
-  if (foodData === "404") {
-    res.status(404).send("Food not found"); //에러라서 없는것과, 찾았는데 없는것을 구분하기 위해 404로 설정
-    return;
-  } else {
-    res.status(200).json(foodData);
-    return;
+    if (foodData.length === 0) {
+      res.status(404).send("Food not found");
+    } else {
+      res.status(200).json(foodData);
+    }
+  } catch (error) {
+    console.error('Error fetching alert data:', error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
 
 export default {
   getAlertData,
