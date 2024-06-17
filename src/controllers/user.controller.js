@@ -53,8 +53,34 @@ const userProfile = async (req, res, next) => {
   }
 };
 
+const putUserProfile = async (req, res, next) => {
+  /**
+   * @userData {Object}
+   * @property {string} user_id - 사용자 식별자
+   * @property {string} password - 비밀번호
+   * @property {number} alert_date - 비밀번호
+   */
+  const user_id = req.params.userId;
+  const { password, alert_date } = req.body;
+
+  let userData = await userService.putUserProfile(
+    user_id,
+    password == "" ? null : password,
+    alert_date
+  );
+
+  if (userData === "404") {
+    res.status(404).send("User not found");
+    return;
+  } else {
+    res.send(userData);
+    return;
+  }
+};
+
 export default {
   userLogin,
   userSignup,
   userProfile,
+  putUserProfile,
 };

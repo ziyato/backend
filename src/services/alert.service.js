@@ -18,7 +18,7 @@ class AlertService {
     `;
     const values = [userId];
     const result = await client.query(query, values);
-    console.log(`${userId} 님의 음식 데이터 : `, result);
+    console.log(`${userId} 님의 알림 데이터 : `, result.rows);
 
     client.release();
     return result.rows;

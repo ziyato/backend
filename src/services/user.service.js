@@ -61,6 +61,36 @@ class UserService {
       throw error;
     }
   }
+  async putUserProfile(userId, password, alert_date) {
+    try {
+      const client = await this.dbConfig.connect();
+      let query, values;
+
+      console.log("password = ", password);
+
+      if (password == null) {
+        query =
+          "UPDATE user_schema.user_data SET alert_date = $2 WHERE user_id = $1 RETURNING *";
+        values = [userId, alert_date];
+      } else {
+        query =
+          "UPDATE user_schema.user_data SET password = $2, alert_date = $3 WHERE user_id = $1 RETURNING *";
+        values = [userId, password, alert_date];
+      }
+      const result = await client.query(query, values);
+      console.log("result", result);
+      client.release();
+
+      if (!result.rows[0]) {
+        return "404";
+      } else {
+        return result.rows[0];
+      }
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      throw error;
+    }
+  }
 }
 
 // UserService 인스턴스 생성 및 export
