@@ -94,11 +94,12 @@ class FoodService {
     food_pic,
     category,
     purchase_date,
-    expiration_date
+    expiration_date,
+    food_amount
   ) {
     const client = await this.dbConfig.connect();
     const query =
-      "INSERT INTO food_schema.food_data (user_id, food_name, food_pic, category, purchase_date, expiration_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
+      "INSERT INTO food_schema.food_data (user_id, food_name, food_pic, category, purchase_date, expiration_date, food_amount) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
     const values = [
       user_id,
       food_name,
@@ -106,6 +107,7 @@ class FoodService {
       category,
       purchase_date,
       expiration_date,
+      food_amount,
     ];
 
     try {

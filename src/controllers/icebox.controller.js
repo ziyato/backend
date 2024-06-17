@@ -9,8 +9,6 @@ const getFoodDataAll = async (req, res) => {
   const user_id = req.params.userId;
   const { category, keyword } = req.query;
   const decoded_food_name = decodeURIComponent(keyword);
-  console.log("decoded_food_name : ", decoded_food_name);
-  console.log("Food_name: ", keyword);
 
   try {
     const foodData = await foodService.getFoodDataAll(
@@ -59,9 +57,14 @@ const postFoodData = async (req, res) => {
    * @property {string} expiration_date
    */
   let user_id = req.params.userId;
-  console.log(req.body);
-  let { food_name, food_pic, category, purchase_date, expiration_date } =
-    req.body;
+  let {
+    food_name,
+    food_pic,
+    category,
+    purchase_date,
+    expiration_date,
+    food_amount,
+  } = req.body;
 
   let result = await foodService.postFoodData(
     user_id,
@@ -69,7 +72,8 @@ const postFoodData = async (req, res) => {
     food_pic,
     category,
     purchase_date,
-    expiration_date
+    expiration_date,
+    food_amount
   );
   if (result === "404") {
     res.status(404).send("음식 등록 실패");
@@ -105,8 +109,19 @@ const putFoodData = async (req, res) => {
   const user_id = req.params.userId;
   const food_id = req.params.foodId;
   const { food_amount, purchase_date, expiration_date } = req.body;
-  console.log("user_id : ", user_id, "food_id : ", food_id, "food_amount : ", food_amount, "purchase_date : ", purchase_date, "expiration_date : ", expiration_date)
-  console.log(typeof(food_amount), typeof(purchase_date), typeof(expiration_date))
+  console.log(
+    "user_id : ",
+    user_id,
+    "food_id : ",
+    food_id,
+    "food_amount : ",
+    food_amount,
+    "purchase_date : ",
+    purchase_date,
+    "expiration_date : ",
+    expiration_date
+  );
+  console.log(typeof food_amount, typeof purchase_date, typeof expiration_date);
 
   const foodData = await foodService.putFoodData(
     user_id,
@@ -115,7 +130,7 @@ const putFoodData = async (req, res) => {
     purchase_date,
     expiration_date
   );
-  res.status(200).json(foodData)
+  res.status(200).json(foodData);
 };
 
 export default {

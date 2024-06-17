@@ -18,11 +18,10 @@ const getAlertData = async (req, res) => {
       res.status(200).json(foodData);
     }
   } catch (error) {
-    console.error('Error fetching alert data:', error);
+    console.error("Error fetching alert data:", error);
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 export default {
   getAlertData,
